@@ -2,6 +2,7 @@ import 'package:fixora/core/theme/app_color.dart';
 import 'package:fixora/core/widgets/app_button.dart';
 import 'package:fixora/core/widgets/app_text_field.dart';
 import 'package:fixora/features/auth/ui/login_screen.dart';
+import 'package:fixora/features/auth/ui/otp_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -81,10 +82,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             SizedBox(height: 20),
             AppButton(
-              title: 'Send Reset Link',
+              title: 'SeAppButton',
               colour: AppColors.primary,
-              onPressed: () {
-                if (formKey.currentState!.validate()) {}
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  await Future.delayed(const Duration(seconds: 2));
+
+                  if (!mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OtpScreen()),
+                  );
+                }
               },
             ),
             SizedBox(height: 20),
@@ -94,7 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   const TextSpan(text: 'Remember your password?'),
                   TextSpan(
-                    text: 'Log in',
+                    text: ' Log in',
                     style: TextStyle(
                       color: AppColors.accent,
                       fontWeight: FontWeight.w500,

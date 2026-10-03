@@ -1,3 +1,4 @@
+import 'package:fixora/core/theme/app_color.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      backgroundColor: Colors.grey,
+      backgroundColor: AppColors.background,
     );
   }
 }
