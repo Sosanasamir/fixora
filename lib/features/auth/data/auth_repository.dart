@@ -3,12 +3,7 @@ import 'package:fixora/features/auth/data/user_model.dart';
 class AuthRepository {
   Future<UserModel> login(String email, String password) async {
     await Future.delayed(Duration(seconds: 2));
-    return UserModel(
-      id: '1',
-      name: 'sosana',
-      email: email,
-      phone: '010000000000',
-    );
+    return UserModel(id: '1', name: '', email: email, phone: '');
   }
 
   Future<UserModel> register(

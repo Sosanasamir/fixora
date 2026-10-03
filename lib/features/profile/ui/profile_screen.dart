@@ -3,6 +3,7 @@ import 'package:fixora/core/widgets/app_button.dart';
 import 'package:fixora/features/auth/cubit/auth_cubit.dart';
 import 'package:fixora/features/auth/cubit/auth_state.dart';
 import 'package:fixora/features/auth/ui/login_screen.dart';
+import 'package:fixora/features/profile/ui/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,17 +55,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
 
-        if (state is AuthSuccess) {
-          final name = state.user.name.split(' ');
+        if (state is AuthCurrentUserSuccess) {
+          final user = state.user;
+          final name = user.name.split(' ');
           final initials = name.length > 1
               ? '${name[0][0]}${name[1][0]}'.toUpperCase()
               : name[0][0].toUpperCase();
           return Scaffold(
             backgroundColor: AppColors.background,
             appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back, color: AppColors.accentLight),
+              ),
               iconTheme: IconThemeData(color: AppColors.accentLight),
               elevation: 0,
               backgroundColor: AppColors.primary,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UpdateProfileScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.edit, color: AppColors.accentLight),
+                ),
+              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -73,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 400,
+                        height: 210,
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.only(
@@ -83,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Positioned(
-                        top: 50,
+                        top: 24,
                         left: 0,
                         right: 0,
                         child: Center(
@@ -102,13 +123,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Positioned(
-                        top: 140,
+                        top: 104,
                         left: 0,
                         right: 0,
                         child: Column(
                           children: [
                             Text(
-                              state.user.name,
+                              user.name,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -117,12 +138,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              state.user.phone,
+                              user.phone,
                               style: TextStyle(color: AppColors.primaryLight),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              state.user.email,
+                              user.email,
                               style: TextStyle(color: AppColors.primaryLight),
                             ),
                           ],
@@ -217,21 +238,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  AppButton(
-                    title: 'Log Out',
-                    colour: AppColors.background,
-                    textColor: AppColors.error,
-                    borderColor: AppColors.error,
-                    onPressed: () {
-                      context.read<AuthCubit>().logOut();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                        (route) => false,
-                      );
-                    },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: AppButton(
+                      title: 'Log Out',
+                      colour: AppColors.background,
+                      textColor: AppColors.error,
+                      borderColor: AppColors.error,
+                      onPressed: () {
+                        context.read<AuthCubit>().logOut();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

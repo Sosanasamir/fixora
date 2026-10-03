@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: AppColors.background,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthRegisterSuccess) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginScreen()),

@@ -15,9 +15,23 @@ class AuthLoading extends AuthState {
   const AuthLoading();
 }
 
-class AuthSuccess extends AuthState {
+class AuthLoginSuccess extends AuthState {
   final UserModel user;
-  const AuthSuccess(this.user);
+  const AuthLoginSuccess(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class AuthRegisterSuccess extends AuthState {
+  final UserModel user;
+  const AuthRegisterSuccess(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class AuthCurrentUserSuccess extends AuthState {
+  final UserModel user;
+  const AuthCurrentUserSuccess(this.user);
   @override
   List<Object?> get props => [user];
 }

@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.background,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthLoginSuccess) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => ProfileScreen()),
