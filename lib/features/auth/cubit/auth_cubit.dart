@@ -41,7 +41,18 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> updateProfile(String name, String email, String phone) async {
+    emit(AuthLoading());
+    try {
+      final user = await authRepository.updateProfile(name, email, phone);
+      emit(AuthUpdateProfileSuccess(user));
+    } catch (message) {
+      emit(AuthError(message.toString()));
+    }
+  }
+
   void logOut() {
+    authRepository.logout();
     emit(AuthInitial());
   }
 }

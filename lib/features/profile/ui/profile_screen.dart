@@ -55,8 +55,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
 
-        if (state is AuthCurrentUserSuccess) {
-          final user = state.user;
+        if (state is AuthCurrentUserSuccess ||
+            state is AuthUpdateProfileSuccess) {
+          final user = state is AuthCurrentUserSuccess
+              ? state.user
+              : (state as AuthUpdateProfileSuccess).user;
           final name = user.name.split(' ');
           final initials = name.length > 1
               ? '${name[0][0]}${name[1][0]}'.toUpperCase()
@@ -79,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const UpdateProfileScreen(),
+                        builder: (context) => UpdateProfileScreen(user: user),
                       ),
                     );
                   },

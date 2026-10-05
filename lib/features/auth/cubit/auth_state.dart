@@ -36,6 +36,13 @@ class AuthCurrentUserSuccess extends AuthState {
   List<Object?> get props => [user];
 }
 
+class AuthUpdateProfileSuccess extends AuthState {
+  final UserModel user;
+  const AuthUpdateProfileSuccess(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
 class AuthError extends AuthState {
   final String message;
   const AuthError(this.message);
