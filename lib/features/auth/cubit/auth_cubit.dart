@@ -51,6 +51,38 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> changePassword(String currentPass, String newPass) async {
+    emit(AuthLoading());
+    try {
+      await authRepository.changePassword(currentPass, newPass);
+      emit(AuthChangePasswordSuccess());
+    } catch (message) {
+      emit(AuthError(message.toString()));
+    }
+  }
+
+  Future<void> updateProfileAndPassword(
+    String name,
+    String email,
+    String phone,
+    String? currentPass,
+    String? newPass,
+  ) async {
+    emit(AuthLoading());
+    try {
+      await authRepository.updateProfileAndPassword(
+        name,
+        email,
+        phone,
+        currentPass,
+        newPass,
+      );
+      emit(AuthUpdateProfileAndPasswordSuccess());
+    } catch (message) {
+      emit(AuthError(message.toString()));
+    }
+  }
+
   void logOut() {
     authRepository.logout();
     emit(AuthInitial());

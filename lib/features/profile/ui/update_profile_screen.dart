@@ -19,11 +19,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
+  TextEditingController currentPassword = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+
+  bool showPasswordFields = false;
   @override
   void dispose() {
     name.dispose();
     email.dispose();
     phone.dispose();
+    currentPassword.dispose();
+    password.dispose();
+    confirmPassword.dispose();
     super.dispose();
   }
 
@@ -40,12 +48,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Unable to update profile.')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
-        if (state is AuthUpdateProfileSuccess) {
-          Navigator.pop(context);
+        if (state is AuthUpdateProfileAndPasswordSuccess) {
+          Navigator.pop(context, true);
         }
       },
       builder: (context, state) {
@@ -116,7 +124,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               ),
               SizedBox(height: 20),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    showPasswordFields = !showPasswordFields;
+                  });
+                },
                 child: Text(
                   'change your password?',
                   style: TextStyle(
@@ -126,6 +138,26 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ),
               ),
+              if (showPasswordFields) ...[
+                AppTextField(
+                  label: 'Current Password',
+                  hint: 'enter your current password',
+                  controller: currentPassword,
+                  icon: Icon(Icons.password),
+                ),
+                AppTextField(
+                  label: 'New Password',
+                  hint: 'enter your new password',
+                  controller: password,
+                  icon: Icon(Icons.password),
+                ),
+                AppTextField(
+                  label: 'Confirm Password',
+                  hint: 'confirm your password',
+                  controller: confirmPassword,
+                  icon: Icon(Icons.password),
+                ),
+              ],
               SizedBox(height: 25),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,11 +166,58 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   colour: AppColors.accent,
                   isLoading: state is AuthLoading,
                   onPressed: () {
-                    context.read<AuthCubit>().updateProfile(
-                      name.text,
-                      email.text,
-                      phone.text,
-                    );
+                    if (showPasswordFields) {
+                      if (currentPassword.text.trim().isEmpty ||
+                          password.text.trim().isEmpty ||
+                          confirmPassword.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Please fill in all password fields.',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (password.text.length < 6) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Password must be at least 6 characters.',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (password.text != confirmPassword.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'New password and confirmation do not match.',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
+                      context.read<AuthCubit>().updateProfileAndPassword(
+                        name.text,
+                        email.text,
+                        phone.text,
+                        currentPassword.text,
+                        password.text,
+                      );
+                    } else {
+                      context.read<AuthCubit>().updateProfileAndPassword(
+                        name.text,
+                        email.text,
+                        phone.text,
+                        null,
+                        null,
+                      );
+                    }
                   },
                 ),
               ),

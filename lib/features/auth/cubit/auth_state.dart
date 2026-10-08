@@ -43,6 +43,14 @@ class AuthUpdateProfileSuccess extends AuthState {
   List<Object?> get props => [user];
 }
 
+class AuthChangePasswordSuccess extends AuthState {
+  const AuthChangePasswordSuccess();
+}
+
+class AuthUpdateProfileAndPasswordSuccess extends AuthState {
+  const AuthUpdateProfileAndPasswordSuccess();
+}
+
 class AuthError extends AuthState {
   final String message;
   const AuthError(this.message);

@@ -78,13 +78,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: AppColors.primary,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => UpdateProfileScreen(user: user),
                       ),
                     );
+
+                    if (result == true) {
+                      context.read<AuthCubit>().getCurrentUser();
+                    }
                   },
                   icon: Icon(Icons.edit, color: AppColors.accentLight),
                 ),

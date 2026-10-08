@@ -62,6 +62,30 @@ class AuthRepository {
     return user;
   }
 
+  Future<void> changePassword(String currentPass, String newPass) async {
+    if (_currentUser == null) {
+      throw Exception('No user logged in');
+    }
+    if (currentPass != _registeredPassword) {
+      throw Exception('Wrong password');
+    }
+    _registeredPassword = newPass;
+  }
+
+  Future<void> updateProfileAndPassword(
+    String name,
+    String email,
+    String phone,
+    String? currentPass,
+    String? newPass,
+  ) async {
+    if (currentPass != null) {
+      await changePassword(currentPass, newPass!);
+    }
+
+    await updateProfile(name, email, phone);
+  }
+
   void logout() {
     _currentUser = null;
   }
