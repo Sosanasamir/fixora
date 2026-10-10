@@ -1,7 +1,7 @@
 import 'package:fixora/core/theme/app_color.dart';
 import 'package:fixora/core/widgets/app_button.dart';
 import 'package:fixora/features/auth/ui/widgets/app_otp_field.dart';
-import 'package:fixora/features/home/ui/home_screen.dart';
+import 'package:fixora/features/main/ui/main_screen.dart';
 import 'package:flutter/material.dart';
 
 class OtpScreen extends StatefulWidget {
